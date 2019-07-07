@@ -1,4 +1,6 @@
-# Gesture-Drone with Tello 【July 7, 2019 Under construction】
+# Gesture-Drone with Tello
+## 【July 7, 2019 Under construction】
+
 This repository was created inspired by kodamap's **[tellooo](https://github.com/kodamap/tellooo.git)**.  
 Thank you very much for allowing me to freely change the repository he provided or to post on Qiita's articles.  
 
