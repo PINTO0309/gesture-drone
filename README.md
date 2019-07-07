@@ -241,16 +241,6 @@ extension/IR/MobileNetSSD_FP32/MobileNetSSD_deploy.xml
 
 3. Download Face detection models IR files
 
-```sh
-cd extension/IR/
-models="face-detection-retail-0004 age-gender-recognition-retail-0013 emotions-recognition-retail-0003 head-pose-estimation-adas-0001 landmarks-regression-retail-0009"
-for model in $models
-do
-wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R5/open_model_zoo/${model}/FP16/${model}.xml
-wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R5/open_model_zoo/${model}/FP16/${model}.bin
-done
-```
-or  
 ```bash
 $ cd extension/IR/FP16
 $ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1z2psiJk0jUKbR6mnZwZHA4MOgZTazE5m" > /dev/null
