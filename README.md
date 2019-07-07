@@ -1,4 +1,5 @@
-# Object tracking with Tello 
+# Gesture-Drone with Tello 
+This repository was created inspired by kodamap's **[tellooo](https://github.com/kodamap/tellooo.git)**.  
 
 ## What's this
 
