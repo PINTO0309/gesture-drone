@@ -1,5 +1,8 @@
 _*.py
 _*.html
+*.bin
+*.xml
+*.mapping
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -7,7 +10,7 @@ __pycache__/
 *$py.class
 
 # C extensions
-#*.so
+_*.so
 
 # Distribution / packaging
 .Python
