@@ -250,6 +250,20 @@ wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R5/open
 wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R5/open_model_zoo/${model}/FP16/${model}.bin
 done
 ```
+or  
+**https://github.com/opencv/open_model_zoo/tree/master/model_downloader**
+```bash
+$ git clone https://github.com/opencv/open_model_zoo.git
+$ cd open_model_zoo/model_downloader
+$ sudo -E pip3 install pyyaml requests
+$ ./downloader.py --name \
+  face-detection-retail-0004 \
+  age-gender-recognition-retail-0013 \
+  emotions-recognition-retail-0003 \
+  head-pose-estimation-adas-0001 \
+  landmarks-regression-retail-0009
+```
+
 
 ### Run App
 
