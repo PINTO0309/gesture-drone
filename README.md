@@ -252,6 +252,14 @@ done
 ```
 or  
 ```bash
+$ cd extension/IR/FP16
+$ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1z2psiJk0jUKbR6mnZwZHA4MOgZTazE5m" > /dev/null
+$ CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)"
+$ curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${CODE}&id=1z2psiJk0jUKbR6mnZwZHA4MOgZTazE5m" -o fp16-models.tar.gz
+$ tar -zxvf fp16-models.tar.gz
+$ rm fp16-models.tar.gz
+$ cd ../../..
+
 $ cd extension/IR/FP32
 $ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1_qcwgzYTLoikZW2li7IJOGXgfwaJkwiL" > /dev/null
 $ CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)"
