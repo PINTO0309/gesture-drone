@@ -183,8 +183,8 @@ position_limit is not the actual position of Tello but the position calcurated b
 ### Run app
 
 1. Power on the Tello.
-1. Connect to Tello's wifi network (TELLO-XXXXXX)
-1. Run app (ex. Color tracking with test mode.)
+2. Connect to Tello's wifi network (TELLO-XXXXXX)
+3. Run app (ex. Color tracking with test mode.)
 ```sh
 $ python app.py --test --color yellow
 ```
@@ -219,28 +219,10 @@ upper = 40, 255, 255
 You can test Object deteciton using MobileNet-SSD (detection button). Detection mode requires OpenVINO Toolkit R4/R5 installed on your PC and CPU extension dll ,IR files bellow.
 
 ### Requirements
-* Install Intel® Distribution of OpenVINO™ toolkit for Windows* 10
-https://software.intel.com/en-us/articles/OpenVINO-Install-Windows
+1. Install Intel® Distribution of OpenVINO™ toolkit for linux (2019_R1.1)
+https://docs.openvinotoolkit.org/latest/_docs_install_guides_installing_openvino_linux.html
 
-* URL: https://drive.google.com/open?id=1YKbwy9W0MZObls9dy_0n90MQoRq0RdOB
-  * File extension.zip
-  * Size: 32,084,333 byte
-  * MD5 hash : 31d7c77ade31fd1cb9cca6c9a92128f3
-
-* Extract extension.zip and store extension folder under the "tellooo"
-
-```sh
-extension/cpu_extension.dll
-extension/IR/MobileNetSSD_FP16/MobileNetSSD_deploy.bin
-extension/IR/MobileNetSSD_FP16/MobileNetSSD_deploy.mapping
-extension/IR/MobileNetSSD_FP16/MobileNetSSD_deploy.xml
-extension/IR/MobileNetSSD_FP32/MobileNetSSD_deploy.bin
-extension/IR/MobileNetSSD_FP32/MobileNetSSD_deploy.mapping
-extension/IR/MobileNetSSD_FP32/MobileNetSSD_deploy.xml
-```
-
-3. Download Face detection models IR files
-
+2. Download IR files
 ```bash
 $ cd extension/IR/FP16
 $ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1z2psiJk0jUKbR6mnZwZHA4MOgZTazE5m" > /dev/null
