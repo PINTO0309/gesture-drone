@@ -1,9 +1,3 @@
-_*.py
-_*.html
-*.bin
-*.xml
-*.mapping
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -121,5 +115,10 @@ dmypy.json
 .pyre/
 
 # custom
-extension/
+#extension/
 old/
+_*.py
+_*.html
+*.bin
+*.xml
+*.mapping
