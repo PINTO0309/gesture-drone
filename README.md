@@ -251,7 +251,6 @@ wget --no-check-certificate https://download.01.org/openvinotoolkit/2018_R5/open
 done
 ```
 or  
-**https://github.com/opencv/open_model_zoo/tree/master/model_downloader**
 ```bash
 $ cd extension/IR/FP32
 $ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1_qcwgzYTLoikZW2li7IJOGXgfwaJkwiL" > /dev/null
