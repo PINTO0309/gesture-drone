@@ -1,5 +1,6 @@
-# Gesture-Drone with Tello 
+# Gesture-Drone with Tello 【Under construction】
 This repository was created inspired by kodamap's **[tellooo](https://github.com/kodamap/tellooo.git)**.  
+Thank you very much for allowing me to freely change the repository he provided or to post on Qiita's articles.  
 
 ## What's this
 
