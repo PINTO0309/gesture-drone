@@ -255,7 +255,7 @@ done
 
 1. Run app (ex. Color tracking with test mode AND enable object detection.)
 ```sh
-$ python app.py --test --color yellow --enable_detection
+$ python app.py --test --color yellow --enable_detection --cpu_extension extention/x86-64/libcpu_extension.so
 ```
 * If you use MYRIAD plugin (NCS2（Neural Compute Stick2))
 ```sh
