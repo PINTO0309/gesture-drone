@@ -253,12 +253,12 @@ done
 or  
 **https://github.com/opencv/open_model_zoo/tree/master/model_downloader**
 ```bash
-$ cd extension/IR/
-$ git clone https://github.com/opencv/open_model_zoo.git
-$ cd open_model_zoo/model_downloader
-$ sudo -E pip3 install pyyaml requests
-$ ./downloader.py --name face-detection-retail-0004,age-gender-recognition-retail-0013,\
-emotions-recognition-retail-0003,head-pose-estimation-adas-0001,landmarks-regression-retail-0009
+$ cd extension/IR/FP32
+$ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1_qcwgzYTLoikZW2li7IJOGXgfwaJkwiL" > /dev/null
+$ CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)"
+$ curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${CODE}&id=1_qcwgzYTLoikZW2li7IJOGXgfwaJkwiL" -o fp32-models.tar.gz
+$ tar -zxvf fp32-models.tar.gz
+$ cd ../../..
 ```
 
 
