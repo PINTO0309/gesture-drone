@@ -257,7 +257,7 @@ $ git clone https://github.com/opencv/open_model_zoo.git
 $ cd open_model_zoo/model_downloader
 $ sudo -E pip3 install pyyaml requests
 $ ./downloader.py --name face-detection-retail-0004,age-gender-recognition-retail-0013,\
-  emotions-recognition-retail-0003,head-pose-estimation-adas-0001,landmarks-regression-retail-0009
+emotions-recognition-retail-0003,head-pose-estimation-adas-0001,landmarks-regression-retail-0009
 ```
 
 
