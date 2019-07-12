@@ -262,8 +262,8 @@ http://127.0.0.1:5000/
 
 <a href="https://raw.githubusercontent.com/wiki/kodamap/tellooo/images/object_detection.jpg">
 <img src="https://raw.githubusercontent.com/wiki/kodamap/tellooo/images/object_detection.jpg" alt="detection" style="width:auto;height:auto;" ></a>
-
-
+  
+![drone01](https://github.com/PINTO0309/gesture-drone/blob/master/images/drone01.gif)<br>
 
 ## Misc
 
