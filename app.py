@@ -50,6 +50,7 @@ is_test = False
 is_async_mode = True
 is_object_detection = False
 is_face_detection = False
+is_pose_estimation = False
 is_age_gender_detection = False
 is_emotions_detection = False
 is_head_pose_detection = False
@@ -74,6 +75,7 @@ def send_info(command, tello_response):
         "flip_code": flip_code,
         "is_object_detection": is_object_detection,
         "is_face_detection": is_face_detection,
+        "is_pose_estimation": is_pose_estimation,
         "is_age_gender_detection": is_age_gender_detection,
         "is_emotions_detection": is_emotions_detection,
         "is_head_pose_detection": is_head_pose_detection,
@@ -81,9 +83,9 @@ def send_info(command, tello_response):
     }
     logger.info(
         "cmd:{} res:{} con:{} streamon:{} stream:{} tracking:{} test:{} \
-        ssd:{} face:{} ag:{} em:{} hp:{} lm:{} async:{} flip:{}"
+        ssd:{} face:{} pe:{} ag:{} em:{} hp:{} lm:{} async:{} flip:{}"
         .format(command, tello_response, is_connected, is_streamon, is_stream,
-                is_tracking, is_test, is_object_detection, is_face_detection,
+                is_tracking, is_test, is_object_detection, is_face_detection, is_pose_estimation,
                 is_age_gender_detection, is_emotions_detection,
                 is_head_pose_detection, is_facial_landmarks_detection,
                 is_async_mode, flip_code))
@@ -101,7 +103,7 @@ def gen(camera):
     while True:
         frame = camera.get_frame(is_stream, is_tracking, is_test, speed,
                                  is_async_mode, flip_code, is_object_detection,
-                                 is_face_detection, is_age_gender_detection,
+                                 is_face_detection, is_pose_estimation, is_age_gender_detection,
                                  is_emotions_detection, is_head_pose_detection,
                                  is_facial_landmarks_detection)
         yield (b'--frame\r\n'
@@ -127,8 +129,7 @@ def index():
 
 @app.route('/video_feed')
 def video_feed():
-    camera = VideoCamera(s, algorithm, target_color, is_stream, is_test, speed,
-                         detections)
+    camera = VideoCamera(s, algorithm, target_color, is_stream, is_test, speed, detections)
     return Response(
         gen(camera), mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -204,6 +205,7 @@ def tracking():
     global is_tracking
     global is_object_detection
     global is_face_detection
+    global is_pose_estimation
 
     tello_response = "on"
     command = request.json['command']
@@ -214,18 +216,21 @@ def tracking():
         is_test = False
         is_object_detection = False
         is_face_detection = False
+        is_pose_estimation = False
     elif command == "tracking":
         is_stream = False
         is_tracking = True
         is_test = False
         is_object_detection = False
         is_face_detection = False
+        is_pose_estimation = False
     elif command == "test":
         is_stream = False
         is_tracking = True
         is_test = True
         is_object_detection = False
         is_face_detection = False
+        is_pose_estimation = False
 
     result = send_info(command, tello_response)
     return jsonify(ResultSet=json.dumps(result))
@@ -239,6 +244,7 @@ def detection():
     global is_test
     global is_object_detection
     global is_face_detection
+    global is_pose_estimation
     global is_age_gender_detection
     global is_emotions_detection
     global is_head_pose_detection
@@ -247,7 +253,7 @@ def detection():
     tello_response = "on"
     command = request.json['command']
 
-    if is_object_detection or is_face_detection:
+    if is_object_detection or is_face_detection or is_pose_estimation:
         if command == "async":
             is_async_mode = True
         elif command == "sync":
@@ -259,12 +265,21 @@ def detection():
         is_test = False
         is_object_detection = True
         is_face_detection = False
+        is_pose_estimation = False
     if command == "face_detection":
         is_stream = False
         is_tracking = False
         is_test = False
         is_object_detection = False
         is_face_detection = True
+        is_pose_estimation = False 
+    if command == "pose_estimation":
+        is_stream = False
+        is_tracking = False
+        is_test = False
+        is_object_detection = False
+        is_face_detection = False
+        is_pose_estimation = True
 
     if is_face_detection:
         if command == "age_gender_detection":
@@ -293,12 +308,12 @@ if __name__ == '__main__':
         devices = [
             args.device, args.device, args.device_age_gender,
             args.device_emotions, args.device_head_pose,
-            args.device_facial_landmarks
+            args.device_facial_landmarks, args.device
         ]
         models = [
             args.model_ssd, args.model_face, args.model_age_gender,
             args.model_emotions, args.model_head_pose,
-            args.model_facial_landmarks
+            args.model_facial_landmarks, args.model_pose_estimation
         ]
         if "CPU" in devices and args.cpu_extension is None:
             print(

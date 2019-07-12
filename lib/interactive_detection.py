@@ -27,6 +27,7 @@ FP16 = "extension/IR/FP16/"
 
 model_ss_xml = "MobileNetSSD_deploy.xml"
 model_fc_xml = "face-detection-retail-0004.xml"
+model_pe_xml = "pose-estimation-model-heavy.xml"
 model_ag_xml = "age-gender-recognition-retail-0013.xml"
 model_em_xml = "emotions-recognition-retail-0003.xml"
 model_hp_xml = "head-pose-estimation-adas-0001.xml"
@@ -46,10 +47,10 @@ class Detectors(object):
         self._load_detectors(devices, models)
 
     def _load_detectors(self, devices, models):
-        device_ss, device_fc, device_ag, device_em, device_hp, device_lm = devices
+        device_ss, device_fc, device_ag, device_em, device_hp, device_lm, device_pe = devices
         # self.models are used by app.py to display using models
         self.models = self._define_models(devices, models)
-        model_ss, model_fc, model_ag, model_em, model_hp, model_lm = self.models
+        model_ss, model_fc, model_ag, model_em, model_hp, model_lm, model_pe = self.models
         cpu_extension = self.cpu_extension
         plugin_dir = self.plugin_dir
         prob_threshold = self.prob_threshold
@@ -77,10 +78,15 @@ class Detectors(object):
         self.facial_landmarks_detectors = detectors.FacialLandmarksDetection(
             device_lm, model_lm, cpu_extension, plugin_dir,
             prob_threshold_face, is_async_mode)
+#================================================
+        # Create Pose Estimation class instance
+        self.pose_detection = detectors.PoseDetection(
+            device_pe, model_pe, cpu_extension, plugin_dir, prob_threshold, is_async_mode)
+#================================================
 
     def _define_models(self, devices, models):
-        device_ss, device_fc, device_ag, device_em, device_hp, device_lm = devices
-        model_ss, model_fc, model_ag, model_em, model_hp, model_lm = models
+        device_ss, device_fc, device_ag, device_em, device_hp, device_lm, device_pe = devices
+        model_ss, model_fc, model_ag, model_em, model_hp, model_lm, model_pe = models
 
         # set devices and models
         fp_path = FP32 if device_ss == "CPU" else FP16
@@ -95,8 +101,10 @@ class Detectors(object):
         model_hp = fp_path + model_hp_xml if model_hp is None else model_hp
         fp_path = FP32 if device_lm == "CPU" else FP16
         model_lm = fp_path + model_lm_xml if model_lm is None else model_lm
+        fp_path = FP32 if device_lm == "CPU" else FP16
+        model_pe = fp_path + model_pe_xml if model_pe is None else model_pe
 
-        return [model_ss, model_fc, model_ag, model_em, model_hp, model_lm]
+        return [model_ss, model_fc, model_ag, model_em, model_hp, model_lm, model_pe]
 
 
 class Detections(Detectors):
@@ -124,7 +132,12 @@ class Detections(Detectors):
                   is_emotions_detection, is_head_pose_detection,
                   is_facial_landmarks_detection))
         self.f.start()
-
+#================================================
+        self.p = threading.Thread(
+            target=self._start_pose_estimation,
+            args=(frame, next_frame, is_async_mode))
+        self.p.start()
+#================================================
         # initialize Calculate FPS
         self.accum_time = 0
         self.curr_fps = 0
@@ -150,6 +163,16 @@ class Detections(Detectors):
                       is_head_pose_detection, is_facial_landmarks_detection))
             self.f.start()
         return self.det_frame
+
+#================================================
+    def get_det_pose(self, frame, next_frame, is_async_mode):
+        if not self.p.is_alive():
+            self.p = threading.Thread(
+                target=self._start_pose_estimation,
+                args=(frame, next_frame, is_async_mode))
+            self.p.start()
+        return self.det_frame
+#================================================
 
     def _start_object_detection(self, *args):
         frame = args[0]
@@ -390,6 +413,24 @@ class Detections(Detectors):
         self.det_frame = self.draw_perf_stats(det_time, det_time_txt, frame,
                                               is_async_mode)
         sleep(det_interval)
+
+#================================================
+    def _start_pose_estimation(self, *args):
+        frame = args[0]
+        next_frame = args[1]
+        is_async_mode = args[2]
+
+        if frame is None:
+            logger.info("frame is None")
+            return
+
+        det_time = 0
+        det_time_txt = ""
+
+        det_time, frame, command = self.pose_detection.object_inference(frame, next_frame, is_async_mode)
+        self.det_frame = self.draw_perf_stats(det_time, det_time_txt, frame, is_async_mode)
+        sleep(det_interval)
+#================================================
 
     def draw_axes(self, frame, center_of_face, yaw, pitch, roll, scale):
         yaw *= np.pi / 180.0

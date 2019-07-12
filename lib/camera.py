@@ -29,6 +29,8 @@ class VideoCamera(object):
         # Tello sends video stream to your pc using udp port 11111
         self.cap = cv2.VideoCapture('udp://127.0.0.1:11111')
         ret, frame = self.cap.read()
+        if not ret:
+            return
         self.frame = cv2.resize(frame, resize_prop)
         video_prop = self._get_video_prop()
         logger.info(
@@ -48,7 +50,7 @@ class VideoCamera(object):
             cv2.CAP_PROP_FRAME_HEIGHT), self.cap.get(cv2.CAP_PROP_FPS)
 
     def get_frame(self, is_stream, is_tracking, is_test, speed, is_async_mode,
-                  flip_code, is_object_detection, is_face_detection,
+                  flip_code, is_object_detection, is_face_detection, is_pose_estimation,
                   is_age_gender_detection, is_emotions_detection,
                   is_head_pose_detection, is_facial_landmarks_detection):
 
@@ -60,7 +62,7 @@ class VideoCamera(object):
             frame = self.tracking.get_track_frame(frame, is_stream, is_test,
                                                   speed)
 
-        if is_object_detection or is_face_detection:
+        if is_object_detection or is_face_detection or is_pose_estimation:
             if is_async_mode:
                 ret, next_frame = self.cap.read()
                 next_frame = cv2.resize(next_frame, resize_prop)
@@ -84,13 +86,18 @@ class VideoCamera(object):
                     is_age_gender_detection, is_emotions_detection,
                     is_head_pose_detection, is_facial_landmarks_detection)
 
+#================================================
+            if is_pose_estimation:
+                frame = self.detections.get_det_pose(self.frame, next_frame, is_async_mode)
+#================================================
+
         # The first detected frame is None
         if frame is None:
             ret, jpeg = cv2.imencode('1.jpg', self.frame)
         else:
             ret, jpeg = cv2.imencode('1.jpg', frame)
 
-        if is_async_mode and is_object_detection or is_face_detection:
+        if is_async_mode and (is_object_detection or is_face_detection or is_pose_estimation):
             self.frame = next_frame
 
         return jpeg.tostring()

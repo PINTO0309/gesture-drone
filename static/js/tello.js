@@ -3,7 +3,7 @@ $(function () {
     var info_cmd = ['battery?', 'speed?', 'temp?'];
     var tracking_cmd = ['streaming', 'test', 'tracking'];
     var detection_cmd = ['async', 'sync', 'object_detection',
-        'age_gender_detection', 'face_detection',
+        'age_gender_detection', 'face_detection', 'pose_estimation',
         'emotions_detection', 'head_pose_detection',
         'facial_landmarks_detection'];
     var connect_cmd = ['command'];
@@ -106,6 +106,7 @@ $(function () {
             var flip_code = JSON.parse(data.ResultSet).flip_code;
             var is_obj_det = JSON.parse(data.ResultSet).is_object_detection;
             var is_face_det = JSON.parse(data.ResultSet).is_face_detection;
+            var is_pose_det = JSON.parse(data.ResultSet).is_pose_estimation;
             var is_ag_det = JSON.parse(data.ResultSet).is_age_gender_detection;
             var is_em_det = JSON.parse(data.ResultSet).is_emotions_detection;
             var is_hp_det = JSON.parse(data.ResultSet).is_head_pose_detection;
@@ -128,6 +129,13 @@ $(function () {
                 if (!is_face_det) {
                     $("#is_face_detection").attr("disabled", true);
                 }
+                // pose estimation button control
+                if (is_pose_det) {
+                    $("#is_pose_estimation").attr("disabled", false);
+                }
+                if (!is_pose_det) {
+                    $("#is_pose_estimation").attr("disabled", true);
+                }
                 // requst info of tello
                 if (sent_cmd == "battery?") {
                     $("#info-battery").text(sent_cmd + ":" + tello_res);
@@ -143,7 +151,7 @@ $(function () {
                 if (is_stream || is_tracking) {
                     $("#is_async").attr("disabled", true);
                 }
-                if (is_obj_det || is_face_det) {
+                if (is_obj_det || is_face_det || is_pose_det) {
                     $("#is_async").attr("disabled", false);
                     if (sent_cmd == 'async') {
                         $("#async").attr('class', 'btn btn-danger btn-sm');
@@ -154,7 +162,7 @@ $(function () {
                         $("#sync").attr('class', 'btn btn-danger btn-sm');
                     }
                     //console.log(sent_cmd, detection_cmd.includes(sent_cmd));
-                    $("#res").text("async:" + is_async_mode + " ssd:" + is_obj_det + " face:" + is_face_det + " ag:" + is_ag_det + " em:" + is_em_det + " hp:" + is_hp_det + " lm:" + is_lm_det);
+                    $("#res").text("async:" + is_async_mode + " ssd:" + is_obj_det + " face:" + is_face_det + " pose:" + is_pose_det + " ag:" + is_ag_det + " em:" + is_em_det + " hp:" + is_hp_det + " lm:" + is_lm_det);
                 }
                 //if (sent_cmd == 'object_detection') {
                 //    $("#is_face_detection").attr("disabled", true);

@@ -71,6 +71,12 @@ def build_argparser():
         type=str,
         default=None)
     parser.add_argument(
+        "-m_pe",
+        "--model_pose_estimation",
+        help="Optional. Path to an .xml file with a trained Pose Estimation model.",
+        type=str,
+        default=None)
+    parser.add_argument(
         "-l",
         "--cpu_extension",
         help="MKLDNN (CPU)-targeted custom layers.Absolute path to a shared library with the kernels impl.",
