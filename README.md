@@ -235,9 +235,9 @@ $ rm fp16-models.tar.gz
 $ cd ../../..
 
 $ cd extension/IR/FP32
-$ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1_qcwgzYTLoikZW2li7IJOGXgfwaJkwiL" > /dev/null
+$ curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=1yWzMO_cyINGEIWf7tRQfbTz4l9Bk_1eX" > /dev/null
 $ CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)"
-$ curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${CODE}&id=1_qcwgzYTLoikZW2li7IJOGXgfwaJkwiL" -o fp32-models.tar.gz
+$ curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${CODE}&id=1yWzMO_cyINGEIWf7tRQfbTz4l9Bk_1eX" -o fp32-models.tar.gz
 $ tar -zxvf fp32-models.tar.gz
 $ rm fp32-models.tar.gz
 $ cd ../../..
